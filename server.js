@@ -3,10 +3,9 @@ var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var builder    = require('botbuilder');
 
-/*
 var connector  = new builder.ConsoleConnector().listen();
 var bot = new builder.UniversalBot(connector);
-*/
+
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -31,7 +30,11 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-    res.json({ message: 'POST successful'});
+    bot.dialog('/', function (session) {
+        session.send("%s, I heard: %s", session.userData.name, session.message.text);
+        session.send("Say something else...");
+    });
+    res.json({ message: 'POST successful', user: session.userData.name});
 });
 /*
 bot.dialog('/', function (session) {
