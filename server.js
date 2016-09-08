@@ -3,9 +3,10 @@ var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var builder    = require('botbuilder');
 
+/*
 var connector  = new builder.ConsoleConnector().listen();
 var bot = new builder.UniversalBot(connector);
-
+*/
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,6 +30,10 @@ router.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api!' });   
 });
 
+router.post('/', function(req, res) {
+    res.json({ message: 'POST successful'});
+});
+/*
 bot.dialog('/', function (session) {
     session.send("Tell me about it...");
 });
@@ -50,7 +55,7 @@ bot.use({
         }
     }
 });
-
+*/
 // more routes for our API will happen here
 
 // REGISTER OUR ROUTES -------------------------------
