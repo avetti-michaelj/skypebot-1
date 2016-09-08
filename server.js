@@ -1,6 +1,10 @@
 var express    = require('express');        // call express
 var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
+var builder    = require('botbuilder');
+
+var connector  = new builder.ConsoleConnector().listen();
+var bot = new builder.UniversalBot(connector);
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -23,6 +27,28 @@ router.use(function(req, res, next) {
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api!' });   
+});
+
+bot.dialog('/', function (session) {
+    session.send("Tell me about it...");
+});
+
+// Install logging middleware
+bot.use({
+    botbuilder: function (session, next) {
+        if (/^\/log on/i.test(session.message.text)) {
+            session.userData.isLogging = true;
+            session.send('Logging is now turned on');
+        } else if (/^\/log off/i.test(session.message.text)) {
+            session.userData.isLogging = false;
+            session.send('Logging is now turned off');
+        } else {
+            if (session.userData.isLogging) {
+                console.log('Message Received: ', session.message.text);
+            }
+            next();
+        }
+    }
 });
 
 // more routes for our API will happen here
